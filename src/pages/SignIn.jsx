@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, Loader2, Mail, Lock, ArrowLeft } from 'lucide-react'
@@ -152,6 +152,14 @@ function mapError(msg = '') {
 
 export default function SignIn() {
   const navigate = useNavigate()
+
+  // Auto-redirect if already signed in (e.g. returning PWA user)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate('/dashboard', { replace: true })
+    })
+  }, [])
+
   const [stage, setStage]           = useState('form')
   const [email, setEmail]           = useState('')
   const [pw, setPw]                 = useState('')

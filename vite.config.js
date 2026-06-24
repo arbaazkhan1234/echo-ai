@@ -17,7 +17,7 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait-primary',
         scope: '/',
-        start_url: '/',
+        start_url: '/signin',
         lang: 'en',
         categories: ['lifestyle', 'productivity'],
         icons: [

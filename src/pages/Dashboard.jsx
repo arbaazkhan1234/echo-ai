@@ -2582,85 +2582,6 @@ function HomeSection({
           </span>
         </div>
 
-        {/* ── PWA INSTALL CARD — shown at top so it's never below the fold ── */}
-        {canInstall && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.2 }}
-            style={{
-              background:   'linear-gradient(135deg, #1A1530 0%, #120D28 100%)',
-              borderRadius: 20,
-              border:       '1px solid rgba(201,168,76,0.28)',
-              padding:      '0.85rem 1rem',
-              display:      'flex',
-              alignItems:   'center',
-              gap:          12,
-              boxShadow:    '0 6px 24px rgba(201,168,76,0.10), inset 0 1px 0 rgba(201,168,76,0.12)',
-              position:     'relative',
-              overflow:     'hidden',
-            }}
-          >
-            <div style={{ position: 'absolute', top: -24, left: -24, width: 100, height: 100, borderRadius: '50%', background: 'rgba(201,168,76,0.08)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-
-            {/* App icon */}
-            <div style={{ width: 44, height: 44, borderRadius: 13, background: '#0A0914', border: '1px solid rgba(201,168,76,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 12px rgba(0,0,0,0.45)' }}>
-              <svg viewBox="0 0 64 64" width="26" height="26">
-                <rect x="14" y="11" width="8"  height="42" rx="2" fill="#C9A84C"/>
-                <rect x="14" y="11" width="36" height="8"  rx="2" fill="#C9A84C"/>
-                <rect x="14" y="28" width="28" height="7"  rx="2" fill="#C9A84C"/>
-                <rect x="14" y="45" width="36" height="8"  rx="2" fill="#C9A84C"/>
-              </svg>
-            </div>
-
-            {/* Text */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ margin: 0, fontFamily: "'Bodoni Moda',serif", fontStyle: 'italic', fontSize: '0.92rem', color: '#F0EDE6', lineHeight: 1.2 }}>
-                Install Echo on this device
-              </p>
-              <p style={{ margin: '3px 0 0', fontFamily: "'Jost',sans-serif", fontSize: '0.68rem', color: 'rgba(240,237,230,0.45)', lineHeight: 1.4 }}>
-                {isIOS
-                  ? 'Tap Share → Add to Home Screen'
-                  : promptEvt
-                    ? 'Works offline · feels native · one tap away'
-                    : 'Click the install icon (⊕) in your browser address bar'}
-              </p>
-            </div>
-
-            {/* Action */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-              {isIOS ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(201,168,76,0.14)', border: '1px solid rgba(201,168,76,0.28)', borderRadius: 10, padding: '6px 12px' }}>
-                  <Share2 size={13} color="#C9A84C" strokeWidth={2} />
-                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.72rem', fontWeight: 600, color: '#C9A84C' }}>Share</span>
-                </div>
-              ) : promptEvt ? (
-                <motion.button
-                  onClick={install}
-                  whileTap={{ scale: 0.95 }}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    height: 32, padding: '0 14px',
-                    background: 'linear-gradient(135deg,#A8854E,#C9A84C)',
-                    border: 'none', borderRadius: 10, cursor: 'pointer',
-                    fontFamily: "'Jost',sans-serif", fontSize: '0.76rem', fontWeight: 700,
-                    color: '#0A0914',
-                  }}
-                >
-                  <Download size={12} strokeWidth={2.5} />
-                  Install
-                </motion.button>
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(201,168,76,0.10)', border: '1px solid rgba(201,168,76,0.22)', borderRadius: 10, padding: '6px 11px' }}>
-                  <Download size={13} color="#C9A84C" strokeWidth={1.8} />
-                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.70rem', color: '#C9A84C', fontWeight: 500 }}>Get App</span>
-                </div>
-              )}
-              <button onClick={dismiss} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(240,237,230,0.28)', display: 'flex', lineHeight: 0 }}>
-                <X size={14} strokeWidth={1.8} />
-              </button>
-            </div>
-          </motion.div>
-        )}
 
         {/* ── Question load failure retry ── */}
         {questionLoadFailed && !questionLoading && (
@@ -3900,6 +3821,7 @@ function SettingsSection({ user, onSignOut, addToast, avatarUrl, onAvatarChange 
 ══════════════════════════════════════════════════════════════ */
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { isStandalone, install, promptEvt, isIOS } = usePWAInstall()
 
   /* ── State ── */
   const [user, setUser]             = useState(null)
@@ -4363,6 +4285,90 @@ export default function Dashboard() {
       <div style={{ height: '100vh', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
           <Loader2 size={28} color={GOLD} strokeWidth={1.5} />
+        </motion.div>
+      </div>
+    )
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     INSTALL GATE — block web use, require PWA install
+  ══════════════════════════════════════════════════════════════ */
+  if (!isStandalone) {
+    return (
+      <div style={{ height: '100svh', background: 'linear-gradient(145deg,#0A0914 0%,#140D2E 60%,#0E0820 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 1.5rem', fontFamily: "'Jost',sans-serif", position: 'relative', overflow: 'hidden' }}>
+        {/* Background glow */}
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{ maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28, zIndex: 1, textAlign: 'center' }}
+        >
+          {/* Echo logo */}
+          <div style={{ width: 80, height: 80, borderRadius: 24, background: '#0A0914', border: '1.5px solid rgba(201,168,76,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(201,168,76,0.15), 0 8px 32px rgba(0,0,0,0.6)' }}>
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <rect x="14" y="11" width="8"  height="42" rx="2" fill="#C9A84C"/>
+              <rect x="14" y="11" width="36" height="8"  rx="2" fill="#C9A84C"/>
+              <rect x="14" y="28" width="28" height="7"  rx="2" fill="#C9A84C"/>
+              <rect x="14" y="45" width="36" height="8"  rx="2" fill="#C9A84C"/>
+            </svg>
+          </div>
+
+          {/* Heading */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <h1 style={{ margin: 0, fontFamily: "'Bodoni Moda',serif", fontStyle: 'italic', fontSize: 'clamp(1.6rem,5vw,2.2rem)', color: '#F0EDE6', lineHeight: 1.15 }}>
+              Echo lives on your device
+            </h1>
+            <p style={{ margin: 0, fontSize: '0.95rem', color: 'rgba(240,237,230,0.55)', lineHeight: 1.6, maxWidth: 340 }}>
+              Install the app to get your daily memory question, receive reminders, and use Echo offline — the way it was meant to be experienced.
+            </p>
+          </div>
+
+          {/* Why install — 3 pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+            {['Daily reminders', 'Works offline', 'Full-screen experience'].map(f => (
+              <span key={f} style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 999, padding: '5px 14px', fontSize: '0.75rem', color: '#C9A84C', fontWeight: 500 }}>{f}</span>
+            ))}
+          </div>
+
+          {/* Install CTA */}
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {isIOS ? (
+              <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 16, padding: '1rem 1.2rem' }}>
+                <p style={{ margin: '0 0 8px', fontSize: '0.8rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.08em' }}>How to install on iOS</p>
+                <ol style={{ margin: 0, paddingLeft: 18, fontSize: '0.85rem', color: 'rgba(240,237,230,0.7)', lineHeight: 1.8 }}>
+                  <li>Tap the <strong style={{ color: '#F0EDE6' }}>Share</strong> button at the bottom of Safari</li>
+                  <li>Scroll down and tap <strong style={{ color: '#F0EDE6' }}>Add to Home Screen</strong></li>
+                  <li>Tap <strong style={{ color: '#F0EDE6' }}>Add</strong> — done!</li>
+                </ol>
+              </div>
+            ) : promptEvt ? (
+              <motion.button
+                onClick={install}
+                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02 }}
+                style={{ width: '100%', height: 52, background: 'linear-gradient(135deg,#A8854E,#C9A84C)', border: 'none', borderRadius: 16, cursor: 'pointer', fontFamily: "'Jost',sans-serif", fontSize: '1rem', fontWeight: 700, color: '#0A0914', letterSpacing: '0.03em', boxShadow: '0 6px 24px rgba(201,168,76,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+              >
+                <Download size={18} strokeWidth={2.5} />
+                Install Echo — it's free
+              </motion.button>
+            ) : (
+              <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 16, padding: '1rem 1.2rem' }}>
+                <p style={{ margin: '0 0 6px', fontSize: '0.8rem', fontWeight: 700, color: '#C9A84C', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Install from your browser</p>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(240,237,230,0.65)', lineHeight: 1.7 }}>
+                  Look for the <strong style={{ color: '#F0EDE6' }}>install icon ⊕</strong> in your browser's address bar, or open this page in <strong style={{ color: '#F0EDE6' }}>Chrome on Android</strong> for the easiest install.
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={() => { supabase.auth.signOut(); navigate('/signin') }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.78rem', color: 'rgba(240,237,230,0.25)', fontFamily: "'Jost',sans-serif", padding: '4px 0' }}
+            >
+              Sign out
+            </button>
+          </div>
         </motion.div>
       </div>
     )

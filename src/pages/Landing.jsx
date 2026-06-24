@@ -30,7 +30,7 @@ export default function Landing() {
       if (window.innerWidth < 768) return
 
       try {
-        const { default: Lenis } = await import('@studio-freight/lenis')
+        const { default: Lenis } = await import('lenis')
         lenis = new Lenis({
           duration:  0.7,
           easing:    (t) => 1 - Math.pow(1 - t, 3),

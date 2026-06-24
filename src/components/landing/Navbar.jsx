@@ -19,10 +19,16 @@ const woodBox = {
 }
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen,  setMenuOpen]  = useState(false)
+  const [showTip,   setShowTip]   = useState(false)
   const lastY    = useRef(0)
   const [visible, setVisible] = useState(true)
-  const { canInstall, isIOS, install, dismiss } = usePWAInstall()
+  const { canInstall, isIOS, install, promptEvt } = usePWAInstall()
+
+  const handleInstallClick = () => {
+    if (promptEvt) { install(); return }
+    setShowTip(t => !t)
+  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -167,41 +173,59 @@ export default function Navbar() {
           </Link>
 
           {canInstall && (
-            <button
-              onClick={isIOS ? undefined : install}
-              title={isIOS ? 'Tap Share → Add to Home Screen' : 'Install Echo as an app'}
-              style={{
-                fontFamily:   '"DM Sans", Arial, sans-serif',
-                fontSize:     '12px',
-                fontWeight:   600,
-                color:        '#1C1A17',
-                background:   '#C4975A',
-                border:       'none',
-                borderRadius: '999px',
-                padding:      '7px 16px',
-                cursor:       'pointer',
-                minHeight:    '36px',
-                display:      'flex',
-                alignItems:   'center',
-                gap:          '5px',
-                whiteSpace:   'nowrap',
-                transition:   'background 200ms ease, transform 150ms ease',
-                boxShadow:    '0 2px 8px rgba(196,151,90,0.35)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = '#D4A96A'
-                e.currentTarget.style.transform  = 'scale(1.03)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = '#C4975A'
-                e.currentTarget.style.transform  = 'scale(1)'
-              }}
-            >
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Get App
-            </button>
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={isIOS ? undefined : handleInstallClick}
+                title={isIOS ? 'Tap Share → Add to Home Screen' : 'Install Echo as an app'}
+                style={{
+                  fontFamily:   '"DM Sans", Arial, sans-serif',
+                  fontSize:     '12px',
+                  fontWeight:   600,
+                  color:        '#1C1A17',
+                  background:   '#C4975A',
+                  border:       'none',
+                  borderRadius: '999px',
+                  padding:      '7px 16px',
+                  cursor:       'pointer',
+                  minHeight:    '36px',
+                  display:      'flex',
+                  alignItems:   'center',
+                  gap:          '5px',
+                  whiteSpace:   'nowrap',
+                  transition:   'background 200ms ease, transform 150ms ease',
+                  boxShadow:    '0 2px 8px rgba(196,151,90,0.35)',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = '#D4A96A'
+                  e.currentTarget.style.transform  = 'scale(1.03)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = '#C4975A'
+                  e.currentTarget.style.transform  = 'scale(1)'
+                }}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Get App
+              </button>
+              {showTip && (
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 10px)', right: 0,
+                  background: '#1A1530', border: '1px solid rgba(201,168,76,0.3)',
+                  borderRadius: 14, padding: '12px 14px', width: 230,
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                  fontFamily: '"DM Sans", Arial, sans-serif', zIndex: 999,
+                }}>
+                  <p style={{ margin: '0 0 6px', fontSize: 13, fontWeight: 600, color: '#F0EDE6' }}>Install Echo</p>
+                  {isIOS
+                    ? <p style={{ margin: 0, fontSize: 12, color: 'rgba(240,237,230,0.6)', lineHeight: 1.5 }}>Tap the <strong style={{ color: '#C9A84C' }}>Share</strong> button in Safari, then <strong style={{ color: '#C9A84C' }}>Add to Home Screen</strong>.</p>
+                    : <p style={{ margin: 0, fontSize: 12, color: 'rgba(240,237,230,0.6)', lineHeight: 1.5 }}>Look for the <strong style={{ color: '#C9A84C' }}>install icon ⊕</strong> in your browser's address bar and click it.</p>
+                  }
+                  <button onClick={() => setShowTip(false)} style={{ marginTop: 10, background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, color: 'rgba(240,237,230,0.35)', padding: 0 }}>Dismiss</button>
+                </div>
+              )}
+            </div>
           )}
 
           <Link

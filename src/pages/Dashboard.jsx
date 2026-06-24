@@ -223,7 +223,7 @@ const TEXT     = '#1A1530'
 const MUTED    = 'rgba(26,21,48,0.58)'
 const DIM      = 'rgba(26,21,48,0.28)'
 const SUCCESS  = '#4DAA57'
-const ECHO_AT  = import.meta.env.VITE_DEV_MODE === 'true' ? 3 : 10
+const ECHO_AT  = 10
 const MIN_ANSWER_CHARS = 50
 
 /* ══════════════════════════════════════════════════════════════
@@ -321,79 +321,11 @@ function PhotoPromptModal({ onSelectPhoto, onSkip }) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   DEV RESET BUTTON
-   Only renders when VITE_DEV_MODE=true in .env
-   Deletes all test data for the current user in one click
+   placeholder kept so JSX reference compiles — renders nothing
 ══════════════════════════════════════════════════════════════ */
-function DevResetButton({ onReset, loading }) {
-  const [stage, setStage] = useState('idle') // idle | confirm | resetting
-
-  if (import.meta.env.VITE_DEV_MODE !== 'true') return null
-
+function DevResetButton() {
   return (
-    <div style={{
-      position: 'fixed', bottom: 76, right: 14, zIndex: 500,
-      display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6,
-    }}>
-      <AnimatePresence mode="wait">
-
-        {stage === 'idle' && (
-          <motion.button key="idle"
-            initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.85 }}
-            type="button" onClick={() => setStage('confirm')}
-            title="Developer reset — deletes all test data"
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 11px', background: 'rgba(10,9,20,0.92)', border: '1px solid rgba(224,82,82,0.35)', borderRadius: 8, cursor: 'pointer', backdropFilter: 'blur(12px)', color: 'rgba(224,82,82,0.7)', fontFamily: "'Jost',sans-serif", fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.18s' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(224,82,82,0.7)'; e.currentTarget.style.color = '#E05252' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(224,82,82,0.35)'; e.currentTarget.style.color = 'rgba(224,82,82,0.7)' }}>
-            <AlertCircle size={12} strokeWidth={2} />
-            Dev Reset
-          </motion.button>
-        )}
-
-        {stage === 'confirm' && (
-          <motion.div key="confirm"
-            initial={{ opacity: 0, y: 6, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
-            style={{ background: 'rgba(10,9,20,0.96)', border: '1px solid rgba(224,82,82,0.4)', borderRadius: 12, padding: '0.85rem 1rem', backdropFilter: 'blur(16px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', maxWidth: 220 }}>
-            <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', color: '#F5EDE0', margin: '0 0 4px', fontWeight: 600 }}>
-              Delete all test data?
-            </p>
-            <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', color: MUTED, margin: '0 0 0.85rem', lineHeight: 1.5 }}>
-              Wipes answers, question log, streak, echo history. Cannot be undone.
-            </p>
-            <div style={{ display: 'flex', gap: 7 }}>
-              <button type="button"
-                onClick={() => { setStage('resetting'); onReset().then(() => setStage('idle')) }}
-                style={{ flex: 1, padding: '7px 0', background: 'rgba(224,82,82,0.15)', border: '1px solid rgba(224,82,82,0.4)', borderRadius: 7, cursor: 'pointer', color: '#E05252', fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', fontWeight: 700, transition: 'background 0.15s' }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(224,82,82,0.25)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(224,82,82,0.15)'}>
-                Yes, reset
-              </button>
-              <button type="button"
-                onClick={() => setStage('idle')}
-                style={{ flex: 1, padding: '7px 0', background: SURF_UP, border: `1px solid ${BORDER}`, borderRadius: 7, cursor: 'pointer', color: MUTED, fontFamily: "'Jost',sans-serif", fontSize: '0.75rem', transition: 'background 0.15s' }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}>
-                Cancel
-              </button>
-            </div>
-          </motion.div>
-        )}
-
-        {stage === 'resetting' && (
-          <motion.div key="resetting"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 12px', background: 'rgba(10,9,20,0.92)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, backdropFilter: 'blur(12px)' }}>
-            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }}>
-              <Loader2 size={13} color="rgba(224,82,82,0.7)" strokeWidth={2} />
-            </motion.div>
-            <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.68rem', color: 'rgba(224,82,82,0.7)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-              Resetting…
-            </span>
-          </motion.div>
-        )}
-
-      </AnimatePresence>
-    </div>
+    <></>
   )
 }
 
@@ -626,7 +558,7 @@ function QuestionCardSkeleton() {
 /* ══════════════════════════════════════════════════════════════
    ANSWERED TODAY CARD
 ══════════════════════════════════════════════════════════════ */
-function AnsweredTodayCard({ question, todayAnswer, total, onAddPhoto, uploadingPhoto, onDevNextQuestion }) {
+function AnsweredTodayCard({ question, todayAnswer, total, onAddPhoto, uploadingPhoto }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
       style={{ background: SURFACE, border: '1px solid rgba(106,182,106,0.22)', borderRadius: 18, overflow: 'hidden' }}>
@@ -712,29 +644,6 @@ function AnsweredTodayCard({ question, todayAnswer, total, onAddPhoto, uploading
         </span>
       </div>
 
-      {/* Dev mode bypass — only visible when VITE_DEV_MODE=true */}
-      {import.meta.env.VITE_DEV_MODE === 'true' && onDevNextQuestion && (
-        <>
-          <div style={{ height: 1, background: 'rgba(232,168,56,0.15)' }} />
-          <div style={{ padding: '0.75rem 1.25rem', background: 'rgba(232,168,56,0.04)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                <AlertCircle size={11} color="#E8A838" strokeWidth={2} />
-                <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: '#E8A838', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                  Dev Mode
-                </span>
-              </div>
-            </div>
-            <button type="button" onClick={onDevNextQuestion}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, width: '100%', height: 38, background: 'rgba(232,168,56,0.1)', border: '1px solid rgba(232,168,56,0.3)', borderRadius: 10, cursor: 'pointer', fontFamily: "'Jost',sans-serif", fontSize: '0.8rem', fontWeight: 700, color: '#E8A838', letterSpacing: '0.02em', transition: 'all 0.18s', touchAction: 'manipulation' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(232,168,56,0.18)'; e.currentTarget.style.borderColor = 'rgba(232,168,56,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(232,168,56,0.1)'; e.currentTarget.style.borderColor = 'rgba(232,168,56,0.3)' }}>
-              <ChevronRight size={14} strokeWidth={2.5} />
-              Generate next question now
-            </button>
-          </div>
-        </>
-      )}
     </motion.div>
   )
 }
@@ -1669,7 +1578,6 @@ function UpgradeModal({ userName, memoriesCount, onLater, onWaitlist }) {
 function EchoChat({ user, memories, userName, addToast }) {
   const FREE_LIMIT = 3
   const MAX_CHARS  = 500
-  const IS_DEV     = import.meta.env.VITE_DEV_MODE === 'true'
 
   const [msgs,          setMsgs]         = useState([])
   const [input,         setInput]        = useState('')
@@ -2078,15 +1986,6 @@ ${memCtx}`
         )}
       </AnimatePresence>
 
-      {/* ── Fix 4: Dev mode banner ── */}
-      {IS_DEV && (
-        <div style={{ background: 'rgba(232,168,56,0.1)', borderBottom: '1px solid rgba(232,168,56,0.22)', padding: '5px 1.25rem', display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-          <AlertCircle size={11} color="#E8A838" strokeWidth={2} />
-          <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.63rem', color: '#E8A838', fontWeight: 600, letterSpacing: '0.04em' }}>
-            Dev Mode — Echo unlocks at {ECHO_AT} answers (production threshold: 30)
-          </span>
-        </div>
-      )}
 
       {/* ── Header ── */}
       <div style={{ padding: '0.75rem 1.25rem', borderBottom: `1px solid ${BORDER}`, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0.55rem', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)' }}>
@@ -2542,14 +2441,14 @@ function HomeSection({
   answer, setAnswer, saving, saved, handleSave,
   recording, transcribing, recordingTime, waveformData, formatTime, toggleRecording,
   photoPreviewUrl, onPhotoSelect, onPhotoRemove, onAddPhoto, uploadingPhoto,
-  memories, setSelectedMem, setSection, addToast, onPhotoClick, onDevNextQuestion,
+  memories, setSelectedMem, setSection, addToast, onPhotoClick,
   saveFailed, isOnline, questionLoadFailed, onRetryLoad,
 }) {
   const textareaRef = useRef()
   const [focused, setFocused]   = useState(false)
   const userName  = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Friend'
   const greeting  = getGreeting(userName)
-  const total     = memories.length
+  const total     = memories.filter(m => m.depth_level !== 0).length
   const { canInstall, isIOS, install, dismiss, promptEvt } = usePWAInstall()
   const thisWeek  = memories.filter(m => (Date.now() - new Date(m.created_at)) < 7 * 86400000).length
   const MAX_CHARS = 2000
@@ -2602,8 +2501,7 @@ function HomeSection({
           <QuestionCardSkeleton />
         ) : answeredToday ? (
           <AnsweredTodayCard question={question} todayAnswer={todayAnswer} total={total}
-            onAddPhoto={onAddPhoto} uploadingPhoto={uploadingPhoto}
-            onDevNextQuestion={onDevNextQuestion} />
+            onAddPhoto={onAddPhoto} uploadingPhoto={uploadingPhoto} />
         ) : (
           /* ── ACTIVE QUESTION CARD ── */
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}
@@ -2629,15 +2527,6 @@ function HomeSection({
                 <p style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.62rem', color: DIM, marginTop: '0.55rem', margin: '0.55rem 0 0', letterSpacing: '0.04em' }}>
                   Question from our library
                 </p>
-              )}
-              {/* Dev mode badge — only visible when VITE_DEV_MODE=true */}
-              {import.meta.env.VITE_DEV_MODE === 'true' && (
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: '0.65rem', padding: '3px 9px', background: 'rgba(232,168,56,0.1)', border: '1px solid rgba(232,168,56,0.2)', borderRadius: 999 }}>
-                  <AlertCircle size={10} color="#E8A838" strokeWidth={2} />
-                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.6rem', color: '#E8A838', fontWeight: 600, letterSpacing: '0.06em' }}>
-                    Dev Mode — questions rotating test
-                  </span>
-                </div>
               )}
             </div>
 
@@ -4180,7 +4069,7 @@ export default function Dashboard() {
         question_text: bonusQuestion.question_text,
         answer_text:   answerText,
         category,
-        depth_level:   1,
+        depth_level:   0,
       })
       if (bonusQuestion.logId) {
         await supabase.from('user_question_log').update({ answered: true }).eq('id', bonusQuestion.logId)
@@ -4203,81 +4092,6 @@ export default function Dashboard() {
     navigate('/signin')
   }
 
-  /* ── Dev: skip to next question without waiting till tomorrow ── */
-  /* Only active when VITE_DEV_MODE=true — never compiled into production */
-  const handleDevNextQuestion = import.meta.env.VITE_DEV_MODE === 'true'
-    ? async () => {
-        if (!user) return
-        try {
-          // Delete today's log entry — getTodaysQuestion will generate a fresh one
-          const today = new Date().toISOString().split('T')[0]
-          await supabase
-            .from('user_question_log')
-            .delete()
-            .eq('user_id', user.id)
-            .eq('asked_on', today)
-
-          // Reset UI state immediately so skeleton shows
-          setAnsweredToday(false)
-          setAnswer('')
-          setSaved(false)
-          setQuestionLoading(true)
-
-          // Regenerate — loadData calls getTodaysQuestion which now finds no entry for today
-          await loadData(user.id)
-          addToast('New question generated.', 'success', Check)
-        } catch (err) {
-          console.error('Dev next question error:', err)
-          addToast('Failed to generate next question: ' + err.message, 'error', AlertCircle)
-        }
-      }
-    : undefined
-
-  /* ── Dev reset (only runs when VITE_DEV_MODE=true) ── */
-  const handleDevReset = async () => {
-    if (!user) return
-    try {
-      await Promise.all([
-        // Wipe all answers
-        supabase.from('user_answers').delete().eq('user_id', user.id),
-        // Wipe question log so a fresh AI question generates today
-        supabase.from('user_question_log').delete().eq('user_id', user.id),
-        // Wipe echo chat history
-        supabase.from('echo_conversations').delete().eq('user_id', user.id),
-      ])
-      // Reset profile counters (keep the row, just zero everything)
-      await supabase.from('user_profiles').update({
-        current_streak:      0,
-        longest_streak:      0,
-        total_memories:      0,
-        last_answered_date:  null,
-        echo_messages_today: 0,
-        echo_messages_date:  null,
-      }).eq('id', user.id)
-
-      // Reset all local state
-      setMemories([])
-      setAnswer('')
-      setSaved(false)
-      setAnsweredToday(false)
-      setQuestion({ question_text: '', logId: null, isFromLibrary: false })
-      setSection('home')
-      handlePhotoRemove()
-      setLastSavedMemId(null)
-      setShowPhotoPrompt(false)
-      if (draftKey) localStorage.removeItem(draftKey)
-      draftRestoredRef.current = false
-      setSaveFailed(false)
-      setQuestionLoadFailed(false)
-
-      // Reload fresh question from AI
-      await loadData(user.id)
-      addToast('Dev reset done — all test data deleted.', 'success', Check)
-    } catch (err) {
-      console.error('Dev reset error:', err)
-      addToast('Reset failed: ' + err.message, 'error', AlertCircle)
-    }
-  }
 
   /* ── Loading spinner ── */
   if (loading) {
@@ -4546,7 +4360,6 @@ export default function Dashboard() {
                 onPhotoClick={setLightboxUrl}
                 memories={memories} setSelectedMem={setSelectedMem}
                 setSection={setSection} addToast={addToast}
-                onDevNextQuestion={handleDevNextQuestion}
                 saveFailed={saveFailed}
                 isOnline={isOnline}
                 questionLoadFailed={questionLoadFailed}

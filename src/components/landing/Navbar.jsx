@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { usePWAInstall } from '../../hooks/usePWAInstall'
 
 const NAV_LINKS = [
   { label: 'How It Works', href: '#how-it-works' },
@@ -21,6 +22,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const lastY    = useRef(0)
   const [visible, setVisible] = useState(true)
+  const { canInstall, isIOS, install, dismiss } = usePWAInstall()
 
   useEffect(() => {
     const onScroll = () => {
@@ -164,6 +166,43 @@ export default function Navbar() {
             Sign in
           </Link>
 
+          {canInstall && (
+            <button
+              onClick={isIOS ? undefined : install}
+              title={isIOS ? 'Tap Share → Add to Home Screen' : 'Install Echo as an app'}
+              style={{
+                fontFamily:   '"DM Sans", Arial, sans-serif',
+                fontSize:     '12px',
+                fontWeight:   500,
+                color:        'rgba(196,151,90,0.9)',
+                background:   'rgba(196,151,90,0.1)',
+                border:       '1px solid rgba(196,151,90,0.28)',
+                borderRadius: '999px',
+                padding:      '7px 14px',
+                cursor:       'pointer',
+                minHeight:    '36px',
+                display:      'flex',
+                alignItems:   'center',
+                gap:          '5px',
+                whiteSpace:   'nowrap',
+                transition:   'all 200ms ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(196,151,90,0.18)'
+                e.currentTarget.style.color      = '#C4975A'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(196,151,90,0.1)'
+                e.currentTarget.style.color      = 'rgba(196,151,90,0.9)'
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Get App
+            </button>
+          )}
+
           <Link
             to="/signup"
             style={{
@@ -239,6 +278,16 @@ export default function Navbar() {
               style={{ fontFamily: '"DM Sans",sans-serif', fontSize: '14px', fontWeight: 500, color: '#1C1A17', background: '#C4975A', borderRadius: '999px', padding: '14px 40px', cursor: 'pointer' }}>
               Start Free
             </Link>
+            {canInstall && (
+              <button
+                onClick={() => { setMenuOpen(false); isIOS ? null : install() }}
+                style={{ fontFamily: '"DM Sans",sans-serif', fontSize: '13px', color: 'rgba(196,151,90,0.8)', background: 'rgba(196,151,90,0.1)', border: '1px solid rgba(196,151,90,0.25)', borderRadius: '999px', padding: '10px 28px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                {isIOS ? 'Add to Home Screen' : 'Install Echo'}
+              </button>
+            )}
           </div>
         </div>
       )}

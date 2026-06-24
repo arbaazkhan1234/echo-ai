@@ -6,10 +6,12 @@ import {
   LogOut, ChevronDown, Flame, Lock, Check, Search, X, ChevronRight,
   Loader2, Calendar, BookOpen, Bell, Shield, Users, Heart,
   AlertCircle, Sparkles, Send, Edit3, Trash2, Camera, Mail, Sun,
+  Download, Share2,
 } from 'lucide-react'
 import { supabase }                              from '../lib/supabase'
 import { validateImageFile, LIMITS }            from '../lib/sanitize'
 import WaitlistModal                             from '../components/WaitlistModal'
+import { usePWAInstall }                        from '../hooks/usePWAInstall'
 import { getTodaysQuestion, getTodaysBonusQuestion, categorizeAnswer } from '../lib/questionGenerator'
 import EchoProgress                              from '../components/dashboard/EchoProgress'
 import { ensureProfile, updateStreak }           from '../lib/streakManager'
@@ -2548,6 +2550,7 @@ function HomeSection({
   const userName  = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Friend'
   const greeting  = getGreeting(userName)
   const total     = memories.length
+  const { canInstall, isIOS, install, dismiss } = usePWAInstall()
   const thisWeek  = memories.filter(m => (Date.now() - new Date(m.created_at)) < 7 * 86400000).length
   const MAX_CHARS = 2000
   const charsLeft = answer.length
@@ -2888,6 +2891,84 @@ function HomeSection({
             </motion.button>
           ))}
         </div>
+
+        {/* ── PWA INSTALL CARD ── */}
+        {canInstall && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            style={{
+              background:   'linear-gradient(135deg, #1A1530 0%, #120D28 100%)',
+              borderRadius: 20,
+              border:       '1px solid rgba(201,168,76,0.22)',
+              padding:      '1rem 1.1rem',
+              display:      'flex',
+              alignItems:   'center',
+              gap:          13,
+              boxShadow:    '0 8px 32px rgba(201,168,76,0.08), inset 0 1px 0 rgba(201,168,76,0.1)',
+              position:     'relative',
+              overflow:     'hidden',
+            }}
+          >
+            {/* Subtle gold glow top-left */}
+            <div style={{ position: 'absolute', top: -30, left: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(201,168,76,0.07)', filter: 'blur(24px)', pointerEvents: 'none' }} />
+
+            {/* App icon */}
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: '#0A0914', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(0,0,0,0.4)' }}>
+              <svg viewBox="0 0 64 64" width="28" height="28">
+                <rect x="14" y="11" width="8"  height="42" rx="2" fill="#C9A84C"/>
+                <rect x="14" y="11" width="36" height="8"  rx="2" fill="#C9A84C"/>
+                <rect x="14" y="28" width="28" height="7"  rx="2" fill="#C9A84C"/>
+                <rect x="14" y="45" width="36" height="8"  rx="2" fill="#C9A84C"/>
+              </svg>
+            </div>
+
+            {/* Text */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ margin: 0, fontFamily: "'Bodoni Moda',serif", fontStyle: 'italic', fontSize: '0.95rem', color: '#F0EDE6', lineHeight: 1.2 }}>
+                Add Echo to your home screen
+              </p>
+              <p style={{ margin: '3px 0 0', fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', color: 'rgba(240,237,230,0.42)', lineHeight: 1.4 }}>
+                {isIOS
+                  ? 'Tap the share button, then "Add to Home Screen"'
+                  : 'One tap away — works offline, feels native'}
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+              {isIOS ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Share2 size={15} color="rgba(201,168,76,0.7)" strokeWidth={1.8} />
+                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.68rem', color: 'rgba(201,168,76,0.7)' }}>Share</span>
+                </div>
+              ) : (
+                <motion.button
+                  onClick={install}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    height: 34, padding: '0 14px',
+                    background: 'linear-gradient(135deg,#A8854E,#C9A84C)',
+                    border: 'none', borderRadius: 10,
+                    cursor: 'pointer',
+                    fontFamily: "'Jost',sans-serif", fontSize: '0.78rem', fontWeight: 700,
+                    color: '#0A0914', letterSpacing: '0.02em',
+                  }}
+                >
+                  <Download size={13} strokeWidth={2.5} />
+                  Install
+                </motion.button>
+              )}
+              <button
+                onClick={dismiss}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(240,237,230,0.3)', display: 'flex', lineHeight: 0 }}
+              >
+                <X size={15} strokeWidth={1.8} />
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         {/* ── RECENT MEMORIES ── */}
         <div>

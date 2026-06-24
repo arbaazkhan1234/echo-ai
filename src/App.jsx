@@ -1,14 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Landing          from './pages/Landing'
-import SignUp           from './pages/SignUp'
-import SignIn           from './pages/SignIn'
-import Dashboard        from './pages/Dashboard'
-import PWAInstallBanner from './components/PWAInstallBanner'
+import Landing   from './pages/Landing'
+import SignUp    from './pages/SignUp'
+import SignIn    from './pages/SignIn'
+import Dashboard from './pages/Dashboard'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <PWAInstallBanner />
       <Routes>
         {/* Public landing page */}
         <Route path="/"         element={<Landing />} />

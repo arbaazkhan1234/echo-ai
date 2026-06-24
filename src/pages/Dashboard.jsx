@@ -2550,7 +2550,7 @@ function HomeSection({
   const userName  = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Friend'
   const greeting  = getGreeting(userName)
   const total     = memories.length
-  const { canInstall, isIOS, install, dismiss } = usePWAInstall()
+  const { canInstall, isIOS, install, dismiss, promptEvt } = usePWAInstall()
   const thisWeek  = memories.filter(m => (Date.now() - new Date(m.created_at)) < 7 * 86400000).length
   const MAX_CHARS = 2000
   const charsLeft = answer.length
@@ -2930,19 +2930,21 @@ function HomeSection({
               </p>
               <p style={{ margin: '3px 0 0', fontFamily: "'Jost',sans-serif", fontSize: '0.7rem', color: 'rgba(240,237,230,0.42)', lineHeight: 1.4 }}>
                 {isIOS
-                  ? 'Tap the share button, then "Add to Home Screen"'
-                  : 'One tap away — works offline, feels native'}
+                  ? 'Tap Share  →  Add to Home Screen'
+                  : promptEvt
+                    ? 'One tap away — works offline, feels native'
+                    : 'Open in Chrome on your phone to install'}
               </p>
             </div>
 
             {/* Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
               {isIOS ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Share2 size={15} color="rgba(201,168,76,0.7)" strokeWidth={1.8} />
-                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.68rem', color: 'rgba(201,168,76,0.7)' }}>Share</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(201,168,76,0.12)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 10, padding: '6px 12px' }}>
+                  <Share2 size={14} color="#C9A84C" strokeWidth={1.8} />
+                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.72rem', fontWeight: 600, color: '#C9A84C' }}>Share</span>
                 </div>
-              ) : (
+              ) : promptEvt ? (
                 <motion.button
                   onClick={install}
                   whileTap={{ scale: 0.95 }}
@@ -2959,6 +2961,11 @@ function HomeSection({
                   <Download size={13} strokeWidth={2.5} />
                   Install
                 </motion.button>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.18)', borderRadius: 10, padding: '6px 12px' }}>
+                  <Download size={14} color="rgba(201,168,76,0.6)" strokeWidth={1.8} />
+                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: '0.72rem', color: 'rgba(201,168,76,0.6)' }}>Get App</span>
+                </div>
               )}
               <button
                 onClick={dismiss}

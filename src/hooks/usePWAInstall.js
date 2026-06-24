@@ -39,7 +39,7 @@ export function usePWAInstall() {
     setDismissed(true)
   }
 
-  const canInstall = !isStandalone && !dismissed && (!!promptEvt || isIOS)
+  const canInstall = !isStandalone && !dismissed
 
   return { canInstall, isIOS, isStandalone, install, dismiss, promptEvt }
 }

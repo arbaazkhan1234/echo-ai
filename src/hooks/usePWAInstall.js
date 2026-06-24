@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
-const DISMISSED_KEY = 'echo_pwa_dismissed'
+const DISMISSED_KEY = 'echo_pwa_dismissed_session'
 
 export function usePWAInstall() {
   const [promptEvt,  setPromptEvt]  = useState(null)
   const [isIOS,      setIsIOS]      = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
   const [dismissed,  setDismissed]  = useState(
-    () => !!localStorage.getItem(DISMISSED_KEY)
+    () => !!sessionStorage.getItem(DISMISSED_KEY)
   )
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export function usePWAInstall() {
   }
 
   const dismiss = () => {
-    localStorage.setItem(DISMISSED_KEY, '1')
+    sessionStorage.setItem(DISMISSED_KEY, '1')
     setDismissed(true)
   }
 

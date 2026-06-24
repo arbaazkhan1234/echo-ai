@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed background for maskable (no rounded corners needed) -->
+  <rect width="512" height="512" fill="#0A0914"/>
+  <!-- E centered in safe zone (inner ~75% = 64px padding each side) -->
+  <rect x="160" y="128" width="42" height="256" rx="10" fill="#C9A84C"/>
+  <rect x="160" y="128" width="192" height="42" rx="10" fill="#C9A84C"/>
+  <rect x="160" y="235" width="152" height="36" rx="10" fill="#C9A84C"/>
+  <rect x="160" y="342" width="192" height="42" rx="10" fill="#C9A84C"/>
+</svg>

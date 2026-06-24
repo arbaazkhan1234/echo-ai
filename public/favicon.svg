@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Dark rounded-square background -->
+  <rect width="64" height="64" rx="16" fill="#0A0914"/>
+
+  <!-- Subtle gold inner glow -->
+  <rect width="64" height="64" rx="16" fill="url(#glow)" opacity="0.35"/>
+
+  <!-- "E" letter — italic serif constructed as paths -->
+  <!-- Vertical stem -->
+  <rect x="18" y="14" width="5.5" height="36" rx="1.5" fill="#C9A84C"/>
+  <!-- Top bar -->
+  <rect x="18" y="14" width="26" height="5.5" rx="1.5" fill="#C9A84C"/>
+  <!-- Middle bar (shorter) -->
+  <rect x="18" y="28.5" width="21" height="5" rx="1.5" fill="#C9A84C"/>
+  <!-- Bottom bar -->
+  <rect x="18" y="44.5" width="26" height="5.5" rx="1.5" fill="#C9A84C"/>
+
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#0A0914"/>
+    </radialGradient>
+  </defs>
+</svg>

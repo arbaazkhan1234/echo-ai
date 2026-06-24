@@ -173,27 +173,28 @@ export default function Navbar() {
               style={{
                 fontFamily:   '"DM Sans", Arial, sans-serif',
                 fontSize:     '12px',
-                fontWeight:   500,
-                color:        'rgba(196,151,90,0.9)',
-                background:   'rgba(196,151,90,0.1)',
-                border:       '1px solid rgba(196,151,90,0.28)',
+                fontWeight:   600,
+                color:        '#1C1A17',
+                background:   '#C4975A',
+                border:       'none',
                 borderRadius: '999px',
-                padding:      '7px 14px',
+                padding:      '7px 16px',
                 cursor:       'pointer',
                 minHeight:    '36px',
                 display:      'flex',
                 alignItems:   'center',
                 gap:          '5px',
                 whiteSpace:   'nowrap',
-                transition:   'all 200ms ease',
+                transition:   'background 200ms ease, transform 150ms ease',
+                boxShadow:    '0 2px 8px rgba(196,151,90,0.35)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(196,151,90,0.18)'
-                e.currentTarget.style.color      = '#C4975A'
+                e.currentTarget.style.background = '#D4A96A'
+                e.currentTarget.style.transform  = 'scale(1.03)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(196,151,90,0.1)'
-                e.currentTarget.style.color      = 'rgba(196,151,90,0.9)'
+                e.currentTarget.style.background = '#C4975A'
+                e.currentTarget.style.transform  = 'scale(1)'
               }}
             >
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

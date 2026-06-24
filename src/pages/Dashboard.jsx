@@ -902,7 +902,7 @@ function MemoryModal({ mem, onClose, onUpdate, onDelete }) {
                 ref={textareaRef}
                 value={editAnswer}
                 onChange={e => setEditAnswer(e.target.value)}
-                style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER_A}`, borderRadius: 11, padding: '12px 14px', fontFamily: "'Jost',sans-serif", fontWeight: 300, fontSize: '0.92rem', color: TEXT, lineHeight: 1.8, resize: 'none', outline: 'none', boxSizing: 'border-box', minHeight: 120 }}
+                style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER_A}`, borderRadius: 11, padding: '12px 14px', fontFamily: "'Jost',sans-serif", fontWeight: 300, fontSize: '1rem', color: TEXT, lineHeight: 1.8, resize: 'none', outline: 'none', boxSizing: 'border-box', minHeight: 120 }}
                 onFocus={e => e.target.style.borderColor = GOLD}
                 onBlur={e => e.target.style.borderColor = BORDER_A}
               />
@@ -1416,7 +1416,7 @@ function BonusQuestionModal({ question, onSave, onSkip, addToast }) {
               placeholder="How did today go…"
               maxLength={1000}
               rows={3}
-              style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 14px', fontFamily: "'Jost',sans-serif", fontSize: '0.9rem', color: TEXT, resize: 'none', outline: 'none', boxSizing: 'border-box', lineHeight: 1.6, transition: 'border-color 0.2s' }}
+              style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 14px', fontFamily: "'Jost',sans-serif", fontSize: '1rem', color: TEXT, resize: 'none', outline: 'none', boxSizing: 'border-box', lineHeight: 1.6, transition: 'border-color 0.2s' }}
               onFocus={e => e.target.style.borderColor = BORDER_A}
               onBlur={e  => e.target.style.borderColor = BORDER}
               autoFocus
@@ -2177,7 +2177,7 @@ ${memCtx}`
               maxLength={MAX_CHARS}
               disabled={isTyping}
               rows={1}
-              style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER}`, borderRadius: 11, padding: '10px 14px', fontFamily: "'Jost',sans-serif", fontSize: '0.88rem', color: TEXT, resize: 'none', outline: 'none', maxHeight: 120, minHeight: 42, lineHeight: 1.5, boxSizing: 'border-box', transition: 'border-color 0.2s', display: 'block' }}
+              style={{ width: '100%', background: SURF_UP, border: `1px solid ${BORDER}`, borderRadius: 11, padding: '10px 14px', fontFamily: "'Jost',sans-serif", fontSize: '1rem', color: TEXT, resize: 'none', outline: 'none', maxHeight: 120, minHeight: 42, lineHeight: 1.5, boxSizing: 'border-box', transition: 'border-color 0.2s', display: 'block' }}
               onFocus={e => { e.currentTarget.style.borderColor = BORDER_A }}
               onBlur={e => { e.currentTarget.style.borderColor = BORDER }}
             />
@@ -2639,7 +2639,7 @@ function HomeSection({
                     onBlur={() => setFocused(false)}
                     placeholder="Write your answer here…"
                     maxLength={MAX_CHARS}
-                    style={{ width: '100%', background: 'rgba(255,255,255,0.55)', border: 'none', outline: 'none', resize: 'none', fontFamily: "'Jost',sans-serif", fontWeight: 300, fontSize: '0.93rem', color: TEXT, lineHeight: 1.8, minHeight: answer.trim() ? 120 : 52, boxSizing: 'border-box', touchAction: 'pan-y', borderRadius: 18, padding: '0.85rem 1rem', boxShadow: 'inset 0 6px 14px rgba(180,50,90,0.13),inset 0 -3px 8px rgba(255,255,255,0.50)', transition: 'box-shadow 0.2s' }}
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.55)', border: 'none', outline: 'none', resize: 'none', fontFamily: "'Jost',sans-serif", fontWeight: 300, fontSize: '1rem', color: TEXT, lineHeight: 1.8, minHeight: answer.trim() ? 120 : 52, boxSizing: 'border-box', touchAction: 'pan-y', borderRadius: 18, padding: '0.85rem 1rem', boxShadow: 'inset 0 6px 14px rgba(180,50,90,0.13),inset 0 -3px 8px rgba(255,255,255,0.50)', transition: 'box-shadow 0.2s' }}
                   />
                   <style>{`textarea::placeholder{color:rgba(26,21,48,0.28)} input::placeholder{color:rgba(26,21,48,0.28)}`}</style>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.35rem' }}>
